@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MyExcelMAUIApp.MainPage"
+             Title="MyExcel">
+
+    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="10" RowSpacing="8">
+
+        <ScrollView Orientation="Horizontal">
+            <HorizontalStackLayout Spacing="6">
+                <Button Text="Зберегти" Clicked="SaveButton_Clicked" />
+                <Button Text="Прочитати" Clicked="ReadButton_Clicked" />
+                <Button Text="Порахувати" Clicked="CalculateButton_Clicked" />
+                <Button Text="Додати рядок" Clicked="AddRowButton_Clicked" />
+                <Button Text="Додати стовпчик" Clicked="AddColumnButton_Clicked" />
+                <Button Text="Видалити рядок" Clicked="DeleteRowButton_Clicked" />
+                <Button Text="Видалити стовпчик" Clicked="DeleteColumnButton_Clicked" />
+                <Button Text="Довідка" Clicked="HelpButton_Clicked" />
+                <Button Text="Вийти" Clicked="ExitButton_Clicked" />
+            </HorizontalStackLayout>
+        </ScrollView>
+
+        <Grid Grid.Row="1" ColumnDefinitions="60,*" ColumnSpacing="8">
+            <Label x:Name="currentCellLabel" Text="" FontAttributes="Bold" VerticalOptions="Center" />
+            <Entry x:Name="textInput" Grid.Column="1" Placeholder="Виберіть клітинку і введіть вираз, наприклад =A1+B2*2"
+                   Completed="TextInput_Completed" />
+        </Grid>
+
+        <Label x:Name="statusLabel" Grid.Row="2" TextColor="DarkRed" />
+
+        <ScrollView Grid.Row="3" Orientation="Both">
+            <Grid x:Name="grid" ColumnSpacing="2" RowSpacing="2" />
+        </ScrollView>
+    </Grid>
+</ContentPage>
