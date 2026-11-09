@@ -1,34 +1,31 @@
 grammar LabCalculator;
 
 /*
- * Parser Rules
+ * Варіант 45: 1, 4, 6, 8, 10
+ * +, -, *, /  |  ^  |  max(x,y), min(x,y)  |  =, <, >  |  not
  */
 
-compileUnit : expression EOF;
+compileUnit : EQUAL? expression EOF;
 
 expression :
 	LPAREN expression RPAREN #ParenthesizedExpr
 	| <assoc=right> expression EXPONENT expression #ExponentialExpr
-	| operatorToken=(ADD | SUBTRACT) expression #UnaryExpr
 	| expression operatorToken=(MULTIPLY | DIVIDE) expression #MultiplicativeExpr
 	| expression operatorToken=(ADD | SUBTRACT) expression #AdditiveExpr
-	| operatorToken=(MOD | DIV) LPAREN expression ',' expression RPAREN #ModDivExpr
-	| MMAX LPAREN paramlist=arglist RPAREN #MmaxExpr
-	| MMIN LPAREN paramlist=arglist RPAREN #MminExpr
+	| expression operatorToken=(EQUAL | LESS | GREATER) expression #ComparisonExpr
+	| NOT expression #NotExpr
+	| operatorToken=(MAX | MIN) LPAREN expression ',' expression RPAREN #MaxMinExpr
 	| NUMBER #NumberExpr
 	| IDENTIFIER #IdentifierExpr
 	;
 
-arglist: expression (',' expression)+;
+NUMBER : ('0'..'9')+;
 
-/*
- * Lexer Rules
- */
+MAX : [mM][aA][xX];
+MIN : [mM][iI][nN];
+NOT : [nN][oO][tT];
 
-NUMBER : INT ('.' INT)?;
 IDENTIFIER : [a-zA-Z]+[1-9][0-9]*;
-
-fragment INT : ('0'..'9')+;
 
 EXPONENT : '^';
 MULTIPLY : '*';
@@ -37,10 +34,8 @@ SUBTRACT : '-';
 ADD : '+';
 LPAREN : '(';
 RPAREN : ')';
-
-MOD : 'mod';
-DIV : 'div';
-MMAX : 'mmax';
-MMIN : 'mmin';
+EQUAL : '=';
+LESS : '<';
+GREATER : '>';
 
 WS : [ \t\r\n] -> channel(HIDDEN);

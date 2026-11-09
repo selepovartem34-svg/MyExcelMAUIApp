@@ -67,33 +67,19 @@ public interface ILabCalculatorVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitNumberExpr([NotNull] LabCalculatorParser.NumberExprContext context);
 	/// <summary>
+	/// Visit a parse tree produced by the <c>ComparisonExpr</c>
+	/// labeled alternative in <see cref="LabCalculatorParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitComparisonExpr([NotNull] LabCalculatorParser.ComparisonExprContext context);
+	/// <summary>
 	/// Visit a parse tree produced by the <c>IdentifierExpr</c>
 	/// labeled alternative in <see cref="LabCalculatorParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitIdentifierExpr([NotNull] LabCalculatorParser.IdentifierExprContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>MminExpr</c>
-	/// labeled alternative in <see cref="LabCalculatorParser.expression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitMminExpr([NotNull] LabCalculatorParser.MminExprContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>MmaxExpr</c>
-	/// labeled alternative in <see cref="LabCalculatorParser.expression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitMmaxExpr([NotNull] LabCalculatorParser.MmaxExprContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>ModDivExpr</c>
-	/// labeled alternative in <see cref="LabCalculatorParser.expression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitModDivExpr([NotNull] LabCalculatorParser.ModDivExprContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>ParenthesizedExpr</c>
 	/// labeled alternative in <see cref="LabCalculatorParser.expression"/>.
@@ -102,17 +88,18 @@ public interface ILabCalculatorVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitParenthesizedExpr([NotNull] LabCalculatorParser.ParenthesizedExprContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>UnaryExpr</c>
+	/// Visit a parse tree produced by the <c>NotExpr</c>
 	/// labeled alternative in <see cref="LabCalculatorParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitUnaryExpr([NotNull] LabCalculatorParser.UnaryExprContext context);
+	Result VisitNotExpr([NotNull] LabCalculatorParser.NotExprContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="LabCalculatorParser.arglist"/>.
+	/// Visit a parse tree produced by the <c>MaxMinExpr</c>
+	/// labeled alternative in <see cref="LabCalculatorParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitArglist([NotNull] LabCalculatorParser.ArglistContext context);
+	Result VisitMaxMinExpr([NotNull] LabCalculatorParser.MaxMinExprContext context);
 }
 } // namespace MyExcelMAUIApp.Grammar

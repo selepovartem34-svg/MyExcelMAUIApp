@@ -83,13 +83,12 @@ namespace MyExcelMAUIApp.Model
 
             try
             {
-                string text = cell.Expression.StartsWith('=') ? cell.Expression[1..] : cell.Expression;
-                cell.Value = cell.IsEmpty ? 0 : Calculator.Evaluate(text, name => ResolveCell(name, calculated, inProgress));
-                cell.Error = double.IsFinite(cell.Value) ? null : "Результат не є числом";
+                cell.Value = cell.IsEmpty ? default : Calculator.Evaluate(cell.Expression, name => ResolveCell(name, calculated, inProgress));
+                cell.Error = null;
             }
             catch (EvaluationException ex)
             {
-                cell.Value = 0;
+                cell.Value = default;
                 cell.Error = ex.Message;
             }
             finally
@@ -99,7 +98,7 @@ namespace MyExcelMAUIApp.Model
             }
         }
 
-        private double ResolveCell(string name, HashSet<string> calculated, HashSet<string> inProgress)
+        private Value ResolveCell(string name, HashSet<string> calculated, HashSet<string> inProgress)
         {
             if (!TryParseCellName(name, out int row, out int col) || row < 1 || row > RowCount || col < 1 || col > ColumnCount)
                 throw new EvaluationException($"Клітинки {name} не існує");
@@ -112,6 +111,19 @@ namespace MyExcelMAUIApp.Model
             if (cell.Error != null)
                 throw new EvaluationException($"Помилка в клітинці {name}");
             return cell.Value;
+        }
+
+        public List<string> GetErrors()
+        {
+            var errors = new List<string>();
+            for (int row = 1; row <= RowCount; row++)
+                for (int col = 1; col <= ColumnCount; col++)
+                {
+                    Cell cell = GetCell(row, col);
+                    if (cell.Error != null)
+                        errors.Add($"{cell.Name}: {cell.Error}");
+                }
+            return errors;
         }
 
         public static bool TryParseCellName(string name, out int row, out int col)

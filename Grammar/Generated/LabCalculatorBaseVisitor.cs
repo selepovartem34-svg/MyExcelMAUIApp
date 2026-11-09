@@ -90,6 +90,17 @@ public partial class LabCalculatorBaseVisitor<Result> : AbstractParseTreeVisitor
 	/// <return>The visitor result.</return>
 	public virtual Result VisitNumberExpr([NotNull] LabCalculatorParser.NumberExprContext context) { return VisitChildren(context); }
 	/// <summary>
+	/// Visit a parse tree produced by the <c>ComparisonExpr</c>
+	/// labeled alternative in <see cref="LabCalculatorParser.expression"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitComparisonExpr([NotNull] LabCalculatorParser.ComparisonExprContext context) { return VisitChildren(context); }
+	/// <summary>
 	/// Visit a parse tree produced by the <c>IdentifierExpr</c>
 	/// labeled alternative in <see cref="LabCalculatorParser.expression"/>.
 	/// <para>
@@ -100,39 +111,6 @@ public partial class LabCalculatorBaseVisitor<Result> : AbstractParseTreeVisitor
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	public virtual Result VisitIdentifierExpr([NotNull] LabCalculatorParser.IdentifierExprContext context) { return VisitChildren(context); }
-	/// <summary>
-	/// Visit a parse tree produced by the <c>MminExpr</c>
-	/// labeled alternative in <see cref="LabCalculatorParser.expression"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitMminExpr([NotNull] LabCalculatorParser.MminExprContext context) { return VisitChildren(context); }
-	/// <summary>
-	/// Visit a parse tree produced by the <c>MmaxExpr</c>
-	/// labeled alternative in <see cref="LabCalculatorParser.expression"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitMmaxExpr([NotNull] LabCalculatorParser.MmaxExprContext context) { return VisitChildren(context); }
-	/// <summary>
-	/// Visit a parse tree produced by the <c>ModDivExpr</c>
-	/// labeled alternative in <see cref="LabCalculatorParser.expression"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitModDivExpr([NotNull] LabCalculatorParser.ModDivExprContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by the <c>ParenthesizedExpr</c>
 	/// labeled alternative in <see cref="LabCalculatorParser.expression"/>.
@@ -145,7 +123,7 @@ public partial class LabCalculatorBaseVisitor<Result> : AbstractParseTreeVisitor
 	/// <return>The visitor result.</return>
 	public virtual Result VisitParenthesizedExpr([NotNull] LabCalculatorParser.ParenthesizedExprContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by the <c>UnaryExpr</c>
+	/// Visit a parse tree produced by the <c>NotExpr</c>
 	/// labeled alternative in <see cref="LabCalculatorParser.expression"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
@@ -154,9 +132,10 @@ public partial class LabCalculatorBaseVisitor<Result> : AbstractParseTreeVisitor
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitUnaryExpr([NotNull] LabCalculatorParser.UnaryExprContext context) { return VisitChildren(context); }
+	public virtual Result VisitNotExpr([NotNull] LabCalculatorParser.NotExprContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="LabCalculatorParser.arglist"/>.
+	/// Visit a parse tree produced by the <c>MaxMinExpr</c>
+	/// labeled alternative in <see cref="LabCalculatorParser.expression"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -164,6 +143,6 @@ public partial class LabCalculatorBaseVisitor<Result> : AbstractParseTreeVisitor
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitArglist([NotNull] LabCalculatorParser.ArglistContext context) { return VisitChildren(context); }
+	public virtual Result VisitMaxMinExpr([NotNull] LabCalculatorParser.MaxMinExprContext context) { return VisitChildren(context); }
 }
 } // namespace MyExcelMAUIApp.Grammar

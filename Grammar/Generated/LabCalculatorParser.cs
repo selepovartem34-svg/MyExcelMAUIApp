@@ -37,21 +37,23 @@ public partial class LabCalculatorParser : Parser {
 	protected static DFA[] decisionToDFA;
 	protected static PredictionContextCache sharedContextCache = new PredictionContextCache();
 	public const int
-		T__0=1, NUMBER=2, IDENTIFIER=3, EXPONENT=4, MULTIPLY=5, DIVIDE=6, SUBTRACT=7, 
-		ADD=8, LPAREN=9, RPAREN=10, MOD=11, DIV=12, MMAX=13, MMIN=14, WS=15;
+		T__0=1, NUMBER=2, MAX=3, MIN=4, NOT=5, IDENTIFIER=6, EXPONENT=7, MULTIPLY=8, 
+		DIVIDE=9, SUBTRACT=10, ADD=11, LPAREN=12, RPAREN=13, EQUAL=14, LESS=15, 
+		GREATER=16, WS=17;
 	public const int
-		RULE_compileUnit = 0, RULE_expression = 1, RULE_arglist = 2;
+		RULE_compileUnit = 0, RULE_expression = 1;
 	public static readonly string[] ruleNames = {
-		"compileUnit", "expression", "arglist"
+		"compileUnit", "expression"
 	};
 
 	private static readonly string[] _LiteralNames = {
-		null, "','", null, null, "'^'", "'*'", "'/'", "'-'", "'+'", "'('", "')'", 
-		"'mod'", "'div'", "'mmax'", "'mmin'"
+		null, "','", null, null, null, null, null, "'^'", "'*'", "'/'", "'-'", 
+		"'+'", "'('", "')'", "'='", "'<'", "'>'"
 	};
 	private static readonly string[] _SymbolicNames = {
-		null, null, "NUMBER", "IDENTIFIER", "EXPONENT", "MULTIPLY", "DIVIDE", 
-		"SUBTRACT", "ADD", "LPAREN", "RPAREN", "MOD", "DIV", "MMAX", "MMIN", "WS"
+		null, null, "NUMBER", "MAX", "MIN", "NOT", "IDENTIFIER", "EXPONENT", "MULTIPLY", 
+		"DIVIDE", "SUBTRACT", "ADD", "LPAREN", "RPAREN", "EQUAL", "LESS", "GREATER", 
+		"WS"
 	};
 	public static readonly IVocabulary DefaultVocabulary = new Vocabulary(_LiteralNames, _SymbolicNames);
 
@@ -90,6 +92,7 @@ public partial class LabCalculatorParser : Parser {
 			return GetRuleContext<ExpressionContext>(0);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Eof() { return GetToken(LabCalculatorParser.Eof, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode EQUAL() { return GetToken(LabCalculatorParser.EQUAL, 0); }
 		public CompileUnitContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -107,12 +110,23 @@ public partial class LabCalculatorParser : Parser {
 	public CompileUnitContext compileUnit() {
 		CompileUnitContext _localctx = new CompileUnitContext(Context, State);
 		EnterRule(_localctx, 0, RULE_compileUnit);
+		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 6;
-			expression(0);
+			State = 5;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			if (_la==EQUAL) {
+				{
+				State = 4;
+				Match(EQUAL);
+				}
+			}
+
 			State = 7;
+			expression(0);
+			State = 8;
 			Match(Eof);
 			}
 		}
@@ -201,6 +215,25 @@ public partial class LabCalculatorParser : Parser {
 			else return visitor.VisitChildren(this);
 		}
 	}
+	public partial class ComparisonExprContext : ExpressionContext {
+		public IToken operatorToken;
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
+			return GetRuleContexts<ExpressionContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
+			return GetRuleContext<ExpressionContext>(i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode EQUAL() { return GetToken(LabCalculatorParser.EQUAL, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LESS() { return GetToken(LabCalculatorParser.LESS, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode GREATER() { return GetToken(LabCalculatorParser.GREATER, 0); }
+		public ComparisonExprContext(ExpressionContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			ILabCalculatorVisitor<TResult> typedVisitor = visitor as ILabCalculatorVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitComparisonExpr(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
 	public partial class IdentifierExprContext : ExpressionContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode IDENTIFIER() { return GetToken(LabCalculatorParser.IDENTIFIER, 0); }
 		public IdentifierExprContext(ExpressionContext context) { CopyFrom(context); }
@@ -208,58 +241,6 @@ public partial class LabCalculatorParser : Parser {
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILabCalculatorVisitor<TResult> typedVisitor = visitor as ILabCalculatorVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitIdentifierExpr(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class MminExprContext : ExpressionContext {
-		public ArglistContext paramlist;
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MMIN() { return GetToken(LabCalculatorParser.MMIN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(LabCalculatorParser.LPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN() { return GetToken(LabCalculatorParser.RPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ArglistContext arglist() {
-			return GetRuleContext<ArglistContext>(0);
-		}
-		public MminExprContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			ILabCalculatorVisitor<TResult> typedVisitor = visitor as ILabCalculatorVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitMminExpr(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class MmaxExprContext : ExpressionContext {
-		public ArglistContext paramlist;
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MMAX() { return GetToken(LabCalculatorParser.MMAX, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(LabCalculatorParser.LPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN() { return GetToken(LabCalculatorParser.RPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ArglistContext arglist() {
-			return GetRuleContext<ArglistContext>(0);
-		}
-		public MmaxExprContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			ILabCalculatorVisitor<TResult> typedVisitor = visitor as ILabCalculatorVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitMmaxExpr(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class ModDivExprContext : ExpressionContext {
-		public IToken operatorToken;
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(LabCalculatorParser.LPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
-			return GetRuleContexts<ExpressionContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
-			return GetRuleContext<ExpressionContext>(i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN() { return GetToken(LabCalculatorParser.RPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MOD() { return GetToken(LabCalculatorParser.MOD, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode DIV() { return GetToken(LabCalculatorParser.DIV, 0); }
-		public ModDivExprContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			ILabCalculatorVisitor<TResult> typedVisitor = visitor as ILabCalculatorVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitModDivExpr(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
@@ -277,18 +258,36 @@ public partial class LabCalculatorParser : Parser {
 			else return visitor.VisitChildren(this);
 		}
 	}
-	public partial class UnaryExprContext : ExpressionContext {
-		public IToken operatorToken;
+	public partial class NotExprContext : ExpressionContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NOT() { return GetToken(LabCalculatorParser.NOT, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression() {
 			return GetRuleContext<ExpressionContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ADD() { return GetToken(LabCalculatorParser.ADD, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SUBTRACT() { return GetToken(LabCalculatorParser.SUBTRACT, 0); }
-		public UnaryExprContext(ExpressionContext context) { CopyFrom(context); }
+		public NotExprContext(ExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILabCalculatorVisitor<TResult> typedVisitor = visitor as ILabCalculatorVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitUnaryExpr(this);
+			if (typedVisitor != null) return typedVisitor.VisitNotExpr(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+	public partial class MaxMinExprContext : ExpressionContext {
+		public IToken operatorToken;
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(LabCalculatorParser.LPAREN, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
+			return GetRuleContexts<ExpressionContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
+			return GetRuleContext<ExpressionContext>(i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN() { return GetToken(LabCalculatorParser.RPAREN, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MAX() { return GetToken(LabCalculatorParser.MAX, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MIN() { return GetToken(LabCalculatorParser.MIN, 0); }
+		public MaxMinExprContext(ExpressionContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			ILabCalculatorVisitor<TResult> typedVisitor = visitor as ILabCalculatorVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitMaxMinExpr(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
@@ -310,7 +309,7 @@ public partial class LabCalculatorParser : Parser {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 35;
+			State = 26;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case LPAREN:
@@ -319,89 +318,50 @@ public partial class LabCalculatorParser : Parser {
 				Context = _localctx;
 				_prevctx = _localctx;
 
-				State = 10;
-				Match(LPAREN);
 				State = 11;
-				expression(0);
+				Match(LPAREN);
 				State = 12;
+				expression(0);
+				State = 13;
 				Match(RPAREN);
 				}
 				break;
-			case SUBTRACT:
-			case ADD:
+			case NOT:
 				{
-				_localctx = new UnaryExprContext(_localctx);
+				_localctx = new NotExprContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 14;
-				((UnaryExprContext)_localctx).operatorToken = TokenStream.LT(1);
-				_la = TokenStream.LA(1);
-				if ( !(_la==SUBTRACT || _la==ADD) ) {
-					((UnaryExprContext)_localctx).operatorToken = ErrorHandler.RecoverInline(this);
-				}
-				else {
-					ErrorHandler.ReportMatch(this);
-				    Consume();
-				}
 				State = 15;
-				expression(8);
+				Match(NOT);
+				State = 16;
+				expression(4);
 				}
 				break;
-			case MOD:
-			case DIV:
+			case MAX:
+			case MIN:
 				{
-				_localctx = new ModDivExprContext(_localctx);
+				_localctx = new MaxMinExprContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 16;
-				((ModDivExprContext)_localctx).operatorToken = TokenStream.LT(1);
+				State = 17;
+				((MaxMinExprContext)_localctx).operatorToken = TokenStream.LT(1);
 				_la = TokenStream.LA(1);
-				if ( !(_la==MOD || _la==DIV) ) {
-					((ModDivExprContext)_localctx).operatorToken = ErrorHandler.RecoverInline(this);
+				if ( !(_la==MAX || _la==MIN) ) {
+					((MaxMinExprContext)_localctx).operatorToken = ErrorHandler.RecoverInline(this);
 				}
 				else {
 					ErrorHandler.ReportMatch(this);
 				    Consume();
 				}
-				State = 17;
-				Match(LPAREN);
 				State = 18;
-				expression(0);
+				Match(LPAREN);
 				State = 19;
-				Match(T__0);
-				State = 20;
 				expression(0);
+				State = 20;
+				Match(T__0);
 				State = 21;
-				Match(RPAREN);
-				}
-				break;
-			case MMAX:
-				{
-				_localctx = new MmaxExprContext(_localctx);
-				Context = _localctx;
-				_prevctx = _localctx;
-				State = 23;
-				Match(MMAX);
-				State = 24;
-				Match(LPAREN);
-				State = 25;
-				((MmaxExprContext)_localctx).paramlist = arglist();
-				State = 26;
-				Match(RPAREN);
-				}
-				break;
-			case MMIN:
-				{
-				_localctx = new MminExprContext(_localctx);
-				Context = _localctx;
-				_prevctx = _localctx;
-				State = 28;
-				Match(MMIN);
-				State = 29;
-				Match(LPAREN);
-				State = 30;
-				((MminExprContext)_localctx).paramlist = arglist();
-				State = 31;
+				expression(0);
+				State = 22;
 				Match(RPAREN);
 				}
 				break;
@@ -410,7 +370,7 @@ public partial class LabCalculatorParser : Parser {
 				_localctx = new NumberExprContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 33;
+				State = 24;
 				Match(NUMBER);
 				}
 				break;
@@ -419,7 +379,7 @@ public partial class LabCalculatorParser : Parser {
 				_localctx = new IdentifierExprContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 34;
+				State = 25;
 				Match(IDENTIFIER);
 				}
 				break;
@@ -427,37 +387,37 @@ public partial class LabCalculatorParser : Parser {
 				throw new NoViableAltException(this);
 			}
 			Context.Stop = TokenStream.LT(-1);
-			State = 48;
+			State = 42;
 			ErrorHandler.Sync(this);
-			_alt = Interpreter.AdaptivePredict(TokenStream,2,Context);
+			_alt = Interpreter.AdaptivePredict(TokenStream,3,Context);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( ParseListeners!=null )
 						TriggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					State = 46;
+					State = 40;
 					ErrorHandler.Sync(this);
-					switch ( Interpreter.AdaptivePredict(TokenStream,1,Context) ) {
+					switch ( Interpreter.AdaptivePredict(TokenStream,2,Context) ) {
 					case 1:
 						{
 						_localctx = new ExponentialExprContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 37;
-						if (!(Precpred(Context, 9))) throw new FailedPredicateException(this, "Precpred(Context, 9)");
-						State = 38;
+						State = 28;
+						if (!(Precpred(Context, 8))) throw new FailedPredicateException(this, "Precpred(Context, 8)");
+						State = 29;
 						Match(EXPONENT);
-						State = 39;
-						expression(9);
+						State = 30;
+						expression(8);
 						}
 						break;
 					case 2:
 						{
 						_localctx = new MultiplicativeExprContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 40;
+						State = 31;
 						if (!(Precpred(Context, 7))) throw new FailedPredicateException(this, "Precpred(Context, 7)");
-						State = 41;
+						State = 32;
 						((MultiplicativeExprContext)_localctx).operatorToken = TokenStream.LT(1);
 						_la = TokenStream.LA(1);
 						if ( !(_la==MULTIPLY || _la==DIVIDE) ) {
@@ -467,7 +427,7 @@ public partial class LabCalculatorParser : Parser {
 							ErrorHandler.ReportMatch(this);
 						    Consume();
 						}
-						State = 42;
+						State = 33;
 						expression(8);
 						}
 						break;
@@ -475,9 +435,9 @@ public partial class LabCalculatorParser : Parser {
 						{
 						_localctx = new AdditiveExprContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 43;
+						State = 34;
 						if (!(Precpred(Context, 6))) throw new FailedPredicateException(this, "Precpred(Context, 6)");
-						State = 44;
+						State = 35;
 						((AdditiveExprContext)_localctx).operatorToken = TokenStream.LT(1);
 						_la = TokenStream.LA(1);
 						if ( !(_la==SUBTRACT || _la==ADD) ) {
@@ -487,16 +447,36 @@ public partial class LabCalculatorParser : Parser {
 							ErrorHandler.ReportMatch(this);
 						    Consume();
 						}
-						State = 45;
+						State = 36;
 						expression(7);
+						}
+						break;
+					case 4:
+						{
+						_localctx = new ComparisonExprContext(new ExpressionContext(_parentctx, _parentState));
+						PushNewRecursionContext(_localctx, _startState, RULE_expression);
+						State = 37;
+						if (!(Precpred(Context, 5))) throw new FailedPredicateException(this, "Precpred(Context, 5)");
+						State = 38;
+						((ComparisonExprContext)_localctx).operatorToken = TokenStream.LT(1);
+						_la = TokenStream.LA(1);
+						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << EQUAL) | (1L << LESS) | (1L << GREATER))) != 0)) ) {
+							((ComparisonExprContext)_localctx).operatorToken = ErrorHandler.RecoverInline(this);
+						}
+						else {
+							ErrorHandler.ReportMatch(this);
+						    Consume();
+						}
+						State = 39;
+						expression(6);
 						}
 						break;
 					}
 					} 
 				}
-				State = 50;
+				State = 44;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,2,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,3,Context);
 			}
 			}
 		}
@@ -511,65 +491,6 @@ public partial class LabCalculatorParser : Parser {
 		return _localctx;
 	}
 
-	public partial class ArglistContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
-			return GetRuleContexts<ExpressionContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
-			return GetRuleContext<ExpressionContext>(i);
-		}
-		public ArglistContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_arglist; } }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			ILabCalculatorVisitor<TResult> typedVisitor = visitor as ILabCalculatorVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitArglist(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-
-	[RuleVersion(0)]
-	public ArglistContext arglist() {
-		ArglistContext _localctx = new ArglistContext(Context, State);
-		EnterRule(_localctx, 4, RULE_arglist);
-		int _la;
-		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 51;
-			expression(0);
-			State = 54;
-			ErrorHandler.Sync(this);
-			_la = TokenStream.LA(1);
-			do {
-				{
-				{
-				State = 52;
-				Match(T__0);
-				State = 53;
-				expression(0);
-				}
-				}
-				State = 56;
-				ErrorHandler.Sync(this);
-				_la = TokenStream.LA(1);
-			} while ( _la==T__0 );
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			ErrorHandler.ReportError(this, re);
-			ErrorHandler.Recover(this, re);
-		}
-		finally {
-			ExitRule();
-		}
-		return _localctx;
-	}
-
 	public override bool Sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
 		switch (ruleIndex) {
 		case 1: return expression_sempred((ExpressionContext)_localctx, predIndex);
@@ -578,67 +499,58 @@ public partial class LabCalculatorParser : Parser {
 	}
 	private bool expression_sempred(ExpressionContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 0: return Precpred(Context, 9);
+		case 0: return Precpred(Context, 8);
 		case 1: return Precpred(Context, 7);
 		case 2: return Precpred(Context, 6);
+		case 3: return Precpred(Context, 5);
 		}
 		return true;
 	}
 
 	private static char[] _serializedATN = {
 		'\x3', '\x608B', '\xA72A', '\x8133', '\xB9ED', '\x417C', '\x3BE7', '\x7786', 
-		'\x5964', '\x3', '\x11', '=', '\x4', '\x2', '\t', '\x2', '\x4', '\x3', 
-		'\t', '\x3', '\x4', '\x4', '\t', '\x4', '\x3', '\x2', '\x3', '\x2', '\x3', 
-		'\x2', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', 
+		'\x5964', '\x3', '\x13', '\x30', '\x4', '\x2', '\t', '\x2', '\x4', '\x3', 
+		'\t', '\x3', '\x3', '\x2', '\x5', '\x2', '\b', '\n', '\x2', '\x3', '\x2', 
+		'\x3', '\x2', '\x3', '\x2', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', 
 		'\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', 
 		'\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', 
+		'\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x5', '\x3', '\x1D', '\n', 
 		'\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', 
 		'\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', 
-		'\x3', '\x3', '\x3', '\x5', '\x3', '&', '\n', '\x3', '\x3', '\x3', '\x3', 
-		'\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', 
-		'\x3', '\x3', '\x3', '\x3', '\x3', '\a', '\x3', '\x31', '\n', '\x3', '\f', 
-		'\x3', '\xE', '\x3', '\x34', '\v', '\x3', '\x3', '\x4', '\x3', '\x4', 
-		'\x3', '\x4', '\x6', '\x4', '\x39', '\n', '\x4', '\r', '\x4', '\xE', '\x4', 
-		':', '\x3', '\x4', '\x2', '\x3', '\x4', '\x5', '\x2', '\x4', '\x6', '\x2', 
-		'\x5', '\x3', '\x2', '\t', '\n', '\x3', '\x2', '\r', '\xE', '\x3', '\x2', 
-		'\a', '\b', '\x2', '\x43', '\x2', '\b', '\x3', '\x2', '\x2', '\x2', '\x4', 
-		'%', '\x3', '\x2', '\x2', '\x2', '\x6', '\x35', '\x3', '\x2', '\x2', '\x2', 
-		'\b', '\t', '\x5', '\x4', '\x3', '\x2', '\t', '\n', '\a', '\x2', '\x2', 
-		'\x3', '\n', '\x3', '\x3', '\x2', '\x2', '\x2', '\v', '\f', '\b', '\x3', 
-		'\x1', '\x2', '\f', '\r', '\a', '\v', '\x2', '\x2', '\r', '\xE', '\x5', 
-		'\x4', '\x3', '\x2', '\xE', '\xF', '\a', '\f', '\x2', '\x2', '\xF', '&', 
-		'\x3', '\x2', '\x2', '\x2', '\x10', '\x11', '\t', '\x2', '\x2', '\x2', 
-		'\x11', '&', '\x5', '\x4', '\x3', '\n', '\x12', '\x13', '\t', '\x3', '\x2', 
-		'\x2', '\x13', '\x14', '\a', '\v', '\x2', '\x2', '\x14', '\x15', '\x5', 
-		'\x4', '\x3', '\x2', '\x15', '\x16', '\a', '\x3', '\x2', '\x2', '\x16', 
-		'\x17', '\x5', '\x4', '\x3', '\x2', '\x17', '\x18', '\a', '\f', '\x2', 
-		'\x2', '\x18', '&', '\x3', '\x2', '\x2', '\x2', '\x19', '\x1A', '\a', 
-		'\xF', '\x2', '\x2', '\x1A', '\x1B', '\a', '\v', '\x2', '\x2', '\x1B', 
-		'\x1C', '\x5', '\x6', '\x4', '\x2', '\x1C', '\x1D', '\a', '\f', '\x2', 
-		'\x2', '\x1D', '&', '\x3', '\x2', '\x2', '\x2', '\x1E', '\x1F', '\a', 
-		'\x10', '\x2', '\x2', '\x1F', ' ', '\a', '\v', '\x2', '\x2', ' ', '!', 
-		'\x5', '\x6', '\x4', '\x2', '!', '\"', '\a', '\f', '\x2', '\x2', '\"', 
-		'&', '\x3', '\x2', '\x2', '\x2', '#', '&', '\a', '\x4', '\x2', '\x2', 
-		'$', '&', '\a', '\x5', '\x2', '\x2', '%', '\v', '\x3', '\x2', '\x2', '\x2', 
-		'%', '\x10', '\x3', '\x2', '\x2', '\x2', '%', '\x12', '\x3', '\x2', '\x2', 
-		'\x2', '%', '\x19', '\x3', '\x2', '\x2', '\x2', '%', '\x1E', '\x3', '\x2', 
-		'\x2', '\x2', '%', '#', '\x3', '\x2', '\x2', '\x2', '%', '$', '\x3', '\x2', 
-		'\x2', '\x2', '&', '\x32', '\x3', '\x2', '\x2', '\x2', '\'', '(', '\f', 
-		'\v', '\x2', '\x2', '(', ')', '\a', '\x6', '\x2', '\x2', ')', '\x31', 
-		'\x5', '\x4', '\x3', '\v', '*', '+', '\f', '\t', '\x2', '\x2', '+', ',', 
-		'\t', '\x4', '\x2', '\x2', ',', '\x31', '\x5', '\x4', '\x3', '\n', '-', 
-		'.', '\f', '\b', '\x2', '\x2', '.', '/', '\t', '\x2', '\x2', '\x2', '/', 
-		'\x31', '\x5', '\x4', '\x3', '\t', '\x30', '\'', '\x3', '\x2', '\x2', 
-		'\x2', '\x30', '*', '\x3', '\x2', '\x2', '\x2', '\x30', '-', '\x3', '\x2', 
-		'\x2', '\x2', '\x31', '\x34', '\x3', '\x2', '\x2', '\x2', '\x32', '\x30', 
-		'\x3', '\x2', '\x2', '\x2', '\x32', '\x33', '\x3', '\x2', '\x2', '\x2', 
-		'\x33', '\x5', '\x3', '\x2', '\x2', '\x2', '\x34', '\x32', '\x3', '\x2', 
-		'\x2', '\x2', '\x35', '\x38', '\x5', '\x4', '\x3', '\x2', '\x36', '\x37', 
-		'\a', '\x3', '\x2', '\x2', '\x37', '\x39', '\x5', '\x4', '\x3', '\x2', 
-		'\x38', '\x36', '\x3', '\x2', '\x2', '\x2', '\x39', ':', '\x3', '\x2', 
-		'\x2', '\x2', ':', '\x38', '\x3', '\x2', '\x2', '\x2', ':', ';', '\x3', 
-		'\x2', '\x2', '\x2', ';', '\a', '\x3', '\x2', '\x2', '\x2', '\x6', '%', 
-		'\x30', '\x32', ':',
+		'\x3', '\x3', '\x3', '\x3', '\x3', '\a', '\x3', '+', '\n', '\x3', '\f', 
+		'\x3', '\xE', '\x3', '.', '\v', '\x3', '\x3', '\x3', '\x2', '\x3', '\x4', 
+		'\x4', '\x2', '\x4', '\x2', '\x6', '\x3', '\x2', '\x5', '\x6', '\x3', 
+		'\x2', '\n', '\v', '\x3', '\x2', '\f', '\r', '\x3', '\x2', '\x10', '\x12', 
+		'\x2', '\x36', '\x2', '\a', '\x3', '\x2', '\x2', '\x2', '\x4', '\x1C', 
+		'\x3', '\x2', '\x2', '\x2', '\x6', '\b', '\a', '\x10', '\x2', '\x2', '\a', 
+		'\x6', '\x3', '\x2', '\x2', '\x2', '\a', '\b', '\x3', '\x2', '\x2', '\x2', 
+		'\b', '\t', '\x3', '\x2', '\x2', '\x2', '\t', '\n', '\x5', '\x4', '\x3', 
+		'\x2', '\n', '\v', '\a', '\x2', '\x2', '\x3', '\v', '\x3', '\x3', '\x2', 
+		'\x2', '\x2', '\f', '\r', '\b', '\x3', '\x1', '\x2', '\r', '\xE', '\a', 
+		'\xE', '\x2', '\x2', '\xE', '\xF', '\x5', '\x4', '\x3', '\x2', '\xF', 
+		'\x10', '\a', '\xF', '\x2', '\x2', '\x10', '\x1D', '\x3', '\x2', '\x2', 
+		'\x2', '\x11', '\x12', '\a', '\a', '\x2', '\x2', '\x12', '\x1D', '\x5', 
+		'\x4', '\x3', '\x6', '\x13', '\x14', '\t', '\x2', '\x2', '\x2', '\x14', 
+		'\x15', '\a', '\xE', '\x2', '\x2', '\x15', '\x16', '\x5', '\x4', '\x3', 
+		'\x2', '\x16', '\x17', '\a', '\x3', '\x2', '\x2', '\x17', '\x18', '\x5', 
+		'\x4', '\x3', '\x2', '\x18', '\x19', '\a', '\xF', '\x2', '\x2', '\x19', 
+		'\x1D', '\x3', '\x2', '\x2', '\x2', '\x1A', '\x1D', '\a', '\x4', '\x2', 
+		'\x2', '\x1B', '\x1D', '\a', '\b', '\x2', '\x2', '\x1C', '\f', '\x3', 
+		'\x2', '\x2', '\x2', '\x1C', '\x11', '\x3', '\x2', '\x2', '\x2', '\x1C', 
+		'\x13', '\x3', '\x2', '\x2', '\x2', '\x1C', '\x1A', '\x3', '\x2', '\x2', 
+		'\x2', '\x1C', '\x1B', '\x3', '\x2', '\x2', '\x2', '\x1D', ',', '\x3', 
+		'\x2', '\x2', '\x2', '\x1E', '\x1F', '\f', '\n', '\x2', '\x2', '\x1F', 
+		' ', '\a', '\t', '\x2', '\x2', ' ', '+', '\x5', '\x4', '\x3', '\n', '!', 
+		'\"', '\f', '\t', '\x2', '\x2', '\"', '#', '\t', '\x3', '\x2', '\x2', 
+		'#', '+', '\x5', '\x4', '\x3', '\n', '$', '%', '\f', '\b', '\x2', '\x2', 
+		'%', '&', '\t', '\x4', '\x2', '\x2', '&', '+', '\x5', '\x4', '\x3', '\t', 
+		'\'', '(', '\f', '\a', '\x2', '\x2', '(', ')', '\t', '\x5', '\x2', '\x2', 
+		')', '+', '\x5', '\x4', '\x3', '\b', '*', '\x1E', '\x3', '\x2', '\x2', 
+		'\x2', '*', '!', '\x3', '\x2', '\x2', '\x2', '*', '$', '\x3', '\x2', '\x2', 
+		'\x2', '*', '\'', '\x3', '\x2', '\x2', '\x2', '+', '.', '\x3', '\x2', 
+		'\x2', '\x2', ',', '*', '\x3', '\x2', '\x2', '\x2', ',', '-', '\x3', '\x2', 
+		'\x2', '\x2', '-', '\x5', '\x3', '\x2', '\x2', '\x2', '.', ',', '\x3', 
+		'\x2', '\x2', '\x2', '\x6', '\a', '\x1C', '*', ',',
 	};
 
 	public static readonly ATN _ATN =

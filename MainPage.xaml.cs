@@ -10,6 +10,7 @@ namespace MyExcelMAUIApp
 
         private readonly Table table = new(CountRow, CountColumn);
         private Entry? currentEntry;
+        private bool showExpressions;
 
         public MainPage()
         {
@@ -82,7 +83,8 @@ namespace MyExcelMAUIApp
                 if (child is Entry entry && entry != currentEntry)
                 {
                     var (row, col) = Position(entry);
-                    entry.Text = table.GetCell(row, col).DisplayText;
+                    Cell cell = table.GetCell(row, col);
+                    entry.Text = showExpressions ? cell.Expression : cell.DisplayText;
                 }
             }
         }
@@ -134,19 +136,18 @@ namespace MyExcelMAUIApp
             table.Recalculate();
             RefreshValues();
 
-            var errors = new List<string>();
-            for (int row = 1; row <= table.RowCount; row++)
-                for (int col = 1; col <= table.ColumnCount; col++)
-                {
-                    Cell cell = table.GetCell(row, col);
-                    if (cell.Error != null)
-                        errors.Add($"{cell.Name}: {cell.Error}");
-                }
-
+            var errors = table.GetErrors();
             if (errors.Count > 0)
                 await DisplayAlert("Помилки в таблиці", string.Join("\n", errors.Take(10)), "OK");
             else
                 statusLabel.Text = "Таблицю перераховано, помилок немає";
+        }
+
+        private void ModeButton_Clicked(object sender, EventArgs e)
+        {
+            showExpressions = !showExpressions;
+            modeButton.Text = showExpressions ? "Режим: ВИРАЗ" : "Режим: ЗНАЧЕННЯ";
+            RefreshValues();
         }
 
         private async void SaveButton_Clicked(object sender, EventArgs e)
@@ -210,12 +211,15 @@ namespace MyExcelMAUIApp
         private async void HelpButton_Clicked(object sender, EventArgs e)
         {
             await DisplayAlert("Довідка",
-                "Лабораторна робота 1. Студента групи К25 Шелепова Артема.\n\n" +
-                "У клітинку можна ввести число або вираз (знак = на початку необов'язковий).\n" +
-                "Операції: +, -, *, /, ^ (степінь), унарні + і -, дужки.\n" +
-                "Функції: mod(a, b), div(a, b), mmax(a, b, ...), mmin(a, b, ...).\n" +
+                "Лабораторна робота 1, варіант 45. Студента групи К25 Шелєпова Артема.\n\n" +
+                "У клітинку вводиться ціле число або логічний вираз (знак = на початку необов'язковий).\n" +
+                "Числа цілі довільної довжини, ділення / ціле.\n" +
+                "Операції: +, -, *, /, ^ (степінь), порівняння =, <, >, not, дужки.\n" +
+                "Функції: max(x, y), min(x, y).\n" +
+                "Приклад: not(max(A1, B1) > 10)\n" +
                 "Посилання на клітинки: A1, B2, ... Значення перераховуються автоматично.\n" +
-                "Помилки (ділення на нуль, циклічні посилання, неіснуючі клітинки) " +
+                "Кнопка Режим перемикає показ таблиці: ЗНАЧЕННЯ або ВИРАЗ.\n" +
+                "Помилки (синтаксис, ділення на нуль, циклічні посилання, неіснуючі клітинки) " +
                 "показуються як #ПОМИЛКА, опис - під рядком введення.\n" +
                 "Зберегти - у JSON-файл у папці Документи, Прочитати - вибір файлу.",
                 "OK");

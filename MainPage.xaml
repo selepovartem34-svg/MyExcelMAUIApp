@@ -11,6 +11,7 @@
                 <Button Text="Зберегти" Clicked="SaveButton_Clicked" />
                 <Button Text="Прочитати" Clicked="ReadButton_Clicked" />
                 <Button Text="Порахувати" Clicked="CalculateButton_Clicked" />
+                <Button x:Name="modeButton" Text="Режим: ЗНАЧЕННЯ" Clicked="ModeButton_Clicked" />
                 <Button Text="Додати рядок" Clicked="AddRowButton_Clicked" />
                 <Button Text="Додати стовпчик" Clicked="AddColumnButton_Clicked" />
                 <Button Text="Видалити рядок" Clicked="DeleteRowButton_Clicked" />
@@ -22,7 +23,7 @@
 
         <Grid Grid.Row="1" ColumnDefinitions="60,*" ColumnSpacing="8">
             <Label x:Name="currentCellLabel" Text="" FontAttributes="Bold" VerticalOptions="Center" />
-            <Entry x:Name="textInput" Grid.Column="1" Placeholder="Виберіть клітинку і введіть вираз, наприклад =A1+B2*2"
+            <Entry x:Name="textInput" Grid.Column="1" Placeholder="Виберіть клітинку і введіть вираз, наприклад A1+B2*2 &gt; 10"
                    Completed="TextInput_Completed" />
         </Grid>
 

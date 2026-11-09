@@ -10,7 +10,7 @@ namespace MyExcelMAUIApp.Model
 
     public static class Calculator
     {
-        public static double Evaluate(string expression, Func<string, double> resolveCell)
+        public static Value Evaluate(string expression, Func<string, Value> resolveCell)
         {
             var errorListener = new ThrowExceptionErrorListener();
 
@@ -24,7 +24,13 @@ namespace MyExcelMAUIApp.Model
 
             var tree = parser.compileUnit();
             var visitor = new LabCalculatorVisitor(resolveCell);
-            return visitor.Visit(tree);
+            Value value = visitor.Visit(tree);
+
+            // у варіанті 45 вираз логічний, окреме ціле число - це дані для інших клітинок
+            if (!value.IsLogical && tree.expression() is not LabCalculatorParser.NumberExprContext)
+                throw new EvaluationException("Вираз має бути логічним");
+
+            return value;
         }
     }
 }
